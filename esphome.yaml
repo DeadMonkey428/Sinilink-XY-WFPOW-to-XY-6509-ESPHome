@@ -610,8 +610,86 @@ button:
             id: xy6509_protection_code
             value: 0
 
+  # Die aktuell eingestellten Werte (Sollspannung, Strombegrenzung und alle
+  # Schutzgrenzen) in den gewaehlten Preset-Speicher M0-M9 schreiben.
+  # Der XY-6509 legt jede Gruppe als 15 aufeinanderfolgende Register ab
+  # Basis 0x0050 + Mx*0x10 ab (Modbus-Referenz, Note 2). Es gibt keinen
+  # Sammel-Speicherbefehl; der Block wird direkt per Write-Multiple (0x10)
+  # geschrieben - Faktoren und DWORD-Reihenfolge identisch zu den number-
+  # Entities oben (OAH/OWH sind U_DWORD_R, also Low-Word zuerst).
+  - platform: template
+    id: xy6509_preset_save
+    name: "Aktuelle Werte als Preset speichern"
+    icon: "mdi:content-save"
+    entity_category: config
+    on_press:
+      then:
+        - lambda: |-
+            const auto idx = id(xy6509_preset_save_target).active_index();
+            if (!idx.has_value()) {
+              ESP_LOGW("preset", "Kein Speicherziel gewaehlt");
+              return;
+            }
+            const uint16_t slot = static_cast<uint16_t>(idx.value());  // 0..9
+            const uint16_t base = 0x0050 + slot * 0x0010;
+
+            // Aktuelle Werte in realen Einheiten einsammeln.
+            const float v_set = id(xy6509_set_voltage).state;
+            const float i_set = id(xy6509_set_current).state;
+            const float lvp   = id(xy6509_alarm_lvp).state;
+            const float ovp   = id(xy6509_alarm_ovp).state;
+            const float ocp   = id(xy6509_alarm_ocp).state;
+            const float opp   = id(xy6509_alarm_opp).state;
+            const float ohp_h = id(xy6509_alarm_ohp_hours_raw).state;
+            const float ohp_m = id(xy6509_alarm_ohp_minutes_raw).state;
+            const float oah   = id(xy6509_alarm_oah).state;
+            const float owh   = id(xy6509_alarm_owh).state;
+            const float otp   = id(xy6509_alarm_otp).state;
+            const float etp   = id(xy6509_alarm_etp).state;
+
+            if (isnan(v_set) || isnan(i_set) || isnan(lvp) || isnan(ovp) ||
+                isnan(ocp) || isnan(opp) || isnan(ohp_h) || isnan(ohp_m) ||
+                isnan(oah) || isnan(owh) || isnan(otp) || isnan(etp)) {
+              ESP_LOGW("preset",
+                       "Speichern abgebrochen: noch nicht alle Werte gelesen");
+              return;
+            }
+
+            // In Rohwerte umrechnen (gleiche Faktoren wie die number-Entities).
+            const uint32_t oah_raw =
+                static_cast<uint32_t>(lroundf(oah * 1000.0f));  // Ah -> mAh
+            const uint32_t owh_raw =
+                static_cast<uint32_t>(lroundf(owh * 100.0f));   // Wh -> 10 mWh
+
+            const std::vector<uint16_t> values = {
+              static_cast<uint16_t>(lroundf(v_set * 100.0f)),   // +0x00 V-SET
+              static_cast<uint16_t>(lroundf(i_set * 1000.0f)),  // +0x01 I-SET
+              static_cast<uint16_t>(lroundf(lvp   * 100.0f)),   // +0x02 S-LVP
+              static_cast<uint16_t>(lroundf(ovp   * 100.0f)),   // +0x03 S-OVP
+              static_cast<uint16_t>(lroundf(ocp   * 1000.0f)),  // +0x04 S-OCP
+              static_cast<uint16_t>(lroundf(opp   * 10.0f)),    // +0x05 S-OPP
+              static_cast<uint16_t>(lroundf(ohp_h)),            // +0x06 S-OHP_H
+              static_cast<uint16_t>(lroundf(ohp_m)),            // +0x07 S-OHP_M
+              static_cast<uint16_t>(oah_raw & 0xFFFF),          // +0x08 S-OAH_L
+              static_cast<uint16_t>(oah_raw >> 16),             // +0x09 S-OAH_H
+              static_cast<uint16_t>(owh_raw & 0xFFFF),          // +0x0A S-OWH_L
+              static_cast<uint16_t>(owh_raw >> 16),             // +0x0B S-OWH_H
+              static_cast<uint16_t>(lroundf(otp)),              // +0x0C S-OTP
+              static_cast<uint16_t>(id(xy6509_power_on_output).state ? 1 : 0),  // +0x0D S-INI
+              static_cast<uint16_t>(lroundf(etp)),              // +0x0E S-ETP
+            };
+
+            auto cmd = esphome::modbus_controller::ModbusCommandItem::
+                create_write_multiple_command(
+                    id(xy6509), base,
+                    static_cast<uint16_t>(values.size()), values);
+            id(xy6509)->queue_command(cmd);
+
+            ESP_LOGI("preset", "Preset M%u gespeichert (Basis 0x%04X, %u Register)",
+                     slot, base, static_cast<unsigned>(values.size()));
+
 # ---------------------------------------------------------------------------
-# Preset-Auswahl
+# Presets: laden und speichern
 # ---------------------------------------------------------------------------
 
 select:
@@ -633,6 +711,30 @@ select:
       "M7": 7
       "M8": 8
       "M9": 9
+
+  # Zielspeicher fuer den Button "Aktuelle Werte als Preset speichern".
+  # Reine Auswahl ohne Modbus-Write - geschrieben wird erst per Button.
+  # Achtung: M0 ist die Standardgruppe, M1/M2 sind die Bedienfeld-Presets;
+  # beim Ueberschreiben aendert sich deren Verhalten.
+  - platform: template
+    id: xy6509_preset_save_target
+    name: "Preset-Speicherziel"
+    icon: "mdi:content-save-cog"
+    entity_category: config
+    optimistic: true
+    restore_value: true
+    initial_option: "M3"
+    options:
+      - "M0"
+      - "M1"
+      - "M2"
+      - "M3"
+      - "M4"
+      - "M5"
+      - "M6"
+      - "M7"
+      - "M8"
+      - "M9"
 
 # ---------------------------------------------------------------------------
 # Messwerte

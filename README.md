@@ -15,7 +15,8 @@ Ausgangskapazität & -energie, Laufzeit, interne & externe Temperatur,
 Modell- und Firmwareversion.
 
 **Steuerung** – Sollspannung, Strombegrenzung, Ausgang ein/aus,
-Auto-Einschalten nach Gerätestart, Displayhelligkeit, Preset M0–M9.
+Auto-Einschalten nach Gerätestart, Displayhelligkeit, Presets M0–M9
+**laden und speichern** (siehe [Presets](#presets)).
 
 **Schutzfunktionen** – Grenzwerte für Über-/Unterspannung (OVP/LVP),
 Überstrom (OCP), Überleistung (OPP), Kapazität (OAH), Energie (OWH),
@@ -144,6 +145,40 @@ esphome run esphome-no-encryption.yaml   # ohne Verschlüsselung
 - **Erste Adoption mit Verschlüsselung:** Nach dem Umstieg auf die
   verschlüsselte Variante muss das Gerät in Home Assistant einmal neu
   adoptiert werden (API-Key wird abgefragt). Das ist normal.
+
+## Presets
+
+Der XY-6509 hat 10 Speichergruppen **M0–M9**. Jede Gruppe ist ein Block aus
+15 aufeinanderfolgenden Registern ab **Basis `0x0050 + Mx·0x10`**
+(M0 = `0x0050`, M3 = `0x0080`, M9 = `0x00E0`) und enthält Sollspannung,
+Strombegrenzung und alle Schutzgrenzen (Modbus-Referenz, *Note 2*).
+
+- **Laden** – Entity **„Preset laden"**: schreibt die Gruppennummer 0–9 auf
+  Register `0x001D`, das Gerät ruft die Gruppe sofort ab (*Note 8*).
+- **Speichern** – Entity **„Preset-Speicherziel"** (M0–M9 wählen) plus Button
+  **„Aktuelle Werte als Preset speichern"**: schreibt die aktuell
+  eingestellten Werte per Write-Multiple (`0x10`) in den gewählten Block.
+  Einen Sammel-Speicherbefehl gibt es im Protokoll nicht – der Block wird
+  Register für Register geschrieben.
+
+> M0 ist die Standardgruppe, M1/M2 sind die Presets der Gerätetasten – beim
+> Überschreiben ändert sich deren Verhalten. M3–M9 sind freie Speicher.
+
+## Modbus-Referenz
+
+Das vollständige Protokoll liegt als PDF im Repo:
+[`doc/Sinilink XY-6509.pdf`](doc/Sinilink%20XY-6509.pdf). Wichtige Stellen:
+
+- **Registertabelle** (Abschnitt 1.3) – alle Register mit Adresse, Einheit,
+  Nachkommastellen und R/W. Grundlage der `number`-, `sensor`- und
+  `switch`-Entities in der Config.
+- **Note 2** – Aufbau der Preset-Gruppen M0–M9 und die Basisadress-Formel
+  `0x0050 + Mx·0x10` (siehe [Presets](#presets)).
+- **Note 4** – Bedeutung der Schutz-/Fehlercodes 0–11 (Register `0x0010`),
+  gespiegelt im Text-Sensor „Schutzstatus".
+- **Note 7 / Note 8** – Displayhelligkeit 0–5 bzw. Preset-Abruf über `0x001D`.
+- **Abschnitt 1.1 / 1.2** – Geräteadresse `0x01`, unterstützte Funktionscodes
+  `0x03` / `0x06` / `0x10`, 115200 Baud.
 
 ## Hardware
 
