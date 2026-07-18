@@ -1,0 +1,68 @@
+name: ESPHome CI
+
+# Validiert beide Varianten (Struktur) und kompiliert eine davon, um auch
+# den C++-Lambda-Code (Preset speichern) zu pruefen. Laeuft nur, wenn sich
+# YAML oder der Workflow selbst aendert - nicht bei reinen README-Aenderungen.
+on:
+  push:
+    branches: [main]
+    paths:
+      - "**.yaml"
+      - ".github/workflows/**"
+  pull_request:
+    paths:
+      - "**.yaml"
+      - ".github/workflows/**"
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  esphome:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      # Toolchain (PlatformIO) und Build-Cache zwischen Laeufen behalten,
+      # damit die Kompilierung nach dem ersten Lauf schnell ist.
+      - uses: actions/cache@v4
+        with:
+          path: |
+            ~/.platformio
+            ~/.cache/pip
+            .esphome
+          key: esphome-${{ runner.os }}-${{ hashFiles('esphome.yaml') }}
+          restore-keys: esphome-${{ runner.os }}-
+
+      - name: ESPHome installieren
+        run: pip install esphome
+
+      # Dummy-secrets.yaml neben den Konfig-Dateien (Repo-Wurzel), damit die
+      # !secret-Referenzen aufloesen. Der API-Key muss ein gueltiger
+      # 32-Byte-Base64-Wert sein.
+      - name: Dummy-Secrets anlegen
+        run: |
+          {
+            echo 'wifi_ssid: "ci-ssid"'
+            echo 'wifi_password: "ci-password"'
+            echo 'ap_password: "ci-ap-password"'
+            echo 'ota_password: "ci-ota-password"'
+            echo "api_encryption_key: \"$(openssl rand -base64 32)\""
+          } > secrets.yaml
+
+      # Struktur/Schema beider Varianten pruefen (schnell).
+      - name: Konfiguration validieren
+        run: |
+          esphome config esphome.yaml
+          esphome config esphome-no-encryption.yaml
+
+      # Einmal kompilieren - prueft den gemeinsamen C++-Lambda-Code.
+      # Beide Varianten teilen denselben Code, daher genuegt eine.
+      - name: Kompilieren (prueft Lambda/C++)
+        run: esphome compile esphome.yaml
