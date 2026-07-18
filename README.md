@@ -15,8 +15,12 @@ Ausgangskapazität & -energie, Laufzeit, interne & externe Temperatur,
 Modell- und Firmwareversion.
 
 **Steuerung** – Sollspannung, Strombegrenzung, Ausgang ein/aus,
-Auto-Einschalten nach Gerätestart, Displayhelligkeit, Presets M0–M9
+Auto-Einschalten nach Gerätestart, Displayhelligkeit, Display-Ausschaltzeit,
+Summer, Tastensperre, MPPT- und Konstantleistungs-Modus sowie Presets M0–M9
 **laden und speichern** (siehe [Presets](#presets)).
+
+**Kalibrierung** – Offset für interne und externe Temperatur, damit reale
+Sensorabweichungen ausgeglichen werden können.
 
 **Schutzfunktionen** – Grenzwerte für Über-/Unterspannung (OVP/LVP),
 Überstrom (OCP), Überleistung (OPP), Kapazität (OAH), Energie (OWH),
@@ -179,6 +183,13 @@ Das vollständige Protokoll liegt als PDF im Repo:
 - **Note 7 / Note 8** – Displayhelligkeit 0–5 bzw. Preset-Abruf über `0x001D`.
 - **Abschnitt 1.1 / 1.2** – Geräteadresse `0x01`, unterstützte Funktionscodes
   `0x03` / `0x06` / `0x10`, 115200 Baud.
+
+> **Rohwert-Entities:** Für **MPPT-Koeffizient** (`0x0020`), **Ladeschluss-Strom**
+> (`0x0021`) und **Konstantleistung Wert** (`0x0023`) gibt das Datenblatt keine
+> eindeutige Einheit/Skalierung an – diese Entities zeigen den **Rohwert**.
+> Vor dem Produktiveinsatz per Round-Trip (Wert setzen → am Gerät prüfen)
+> verifizieren und die Grenzen ggf. anpassen. Die `°C/°F`-Umschaltung
+> (`0x0013`) ist bewusst **nicht** schreibbar – bitte am Gerät auf °C stellen.
 
 ## Hardware
 
