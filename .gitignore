@@ -1,0 +1,12 @@
+# Secrets – niemals ins Repo
+secrets.yaml
+**/secrets.yaml
+
+# ESPHome Build-Artefakte
+.esphome/
+**/.esphome/
+
+# Claude / Assistant-Dateien
+.claude/
+.remember/
+CLAUDE.md
