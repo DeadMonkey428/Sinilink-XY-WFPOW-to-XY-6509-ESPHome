@@ -74,13 +74,29 @@ Die Variante ohne Verschlüsselung braucht `api_encryption_key` nicht.
 ### 1. Erstflash via web.esphome.io
 
 Das XY-WFPOW ist ein nacktes ESP8285-Modul ohne USB – der Erstflash läuft
-über den Seriell-Adapter im Browser.
+über einen Seriell-Adapter (**3,3 V!**) an der unteren Stiftleiste.
 
-1. Modul mit dem Adapter verbinden (TX↔RX gekreuzt, GND, 3,3 V). Für den
-   Flash-Modus **GPIO0 beim Einschalten auf GND** ziehen.
-2. [web.esphome.io](https://web.esphome.io) öffnen → **Connect** → seriellen
+![Pinbelegung Sinilink XY-WFPOW](doc/images/sinilink_XY-WFPOW_pinout.jpg)
+
+Verdrahtung an der **unteren Stiftleiste** (Adapter ↔ Modul):
+
+| Adapter | Modul |
+|---------|-------|
+| GND     | GND |
+| TX      | GPIO3 / RXD |
+| RX      | GPIO1 / TXD |
+| 3,3 V   | 3V3 |
+
+Für den **Flash-Modus** zusätzlich **IO0 beim Einschalten auf GND** ziehen
+(danach GND wieder lösen).
+
+1. [web.esphome.io](https://web.esphome.io) öffnen → **Connect** → seriellen
    Port wählen.
-3. **„Prepare for first use“** – flasht eine generische ESPHome-Firmware.
+2. **„Prepare for first use“** – flasht eine generische ESPHome-Firmware.
+
+> Die 4-polige JST-Buchse links (5 V In / RXD / TXD / GND) ist für den
+> Betrieb am XY-6509 – zum Flashen die untere Stiftleiste mit **3,3 V** nutzen,
+> nicht die 5-V-Buchse.
 
 ### 2. WLAN konfigurieren
 
