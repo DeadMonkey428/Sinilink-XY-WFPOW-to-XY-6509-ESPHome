@@ -148,11 +148,9 @@ modbus_controller:
   - id: xy6509
     address: 0x01
     modbus_id: xy6509_modbus
-    # Etwas Luft zwischen den Modbus-Transaktionen. Das XY-6509 fuehrt einen
-    # Schreibvorgang im Rueckleseweg verzoegert nach; mit 10 ms sprangen
-    # Schalter/Werte in HA direkt nach dem Schalten kurz zurueck. Bei Bedarf
-    # weiter erhoehen (bis ~200 ms) - Nebeneffekt: langsamere Sensor-Updates.
-    command_throttle: 50ms
+    # 10 ms ist der Wert, mit dem die Zustaende zuverlaessig gelesen werden.
+    # Hoehere Werte (getestet: 50 ms) stoerten die Zustandserkennung.
+    command_throttle: 10ms
     update_interval: 1s
     setup_priority: -10
 
@@ -210,22 +208,22 @@ number:
     entity_category: config
 
   # Kommunikations-/Modulstatus, Register 0x001E.
-  # 0 = kein/ungueltiges WiFi, 1 = Touch Pair, 2 = AP Pair,
-  # 3 = Router verbinden, 4 = Netzwerk verbunden.
-  # Intern, weil dieser Wert automatisch aus dem ESPHome-WiFi-Status folgt.
+  # Dokumentierte (aber UNBESTAETIGTE) Werte: 0 = kein/ungueltiges WiFi,
+  # 1 = Touch Pair, 2 = AP Pair, 3 = Router verbinden, 4 = Netzwerk verbunden.
+  # TEST/DIAGNOSE: voruebergehend sichtbar und manuell setzbar, um den
+  # richtigen "verbunden"-Wert zu finden. Nach dem Test wieder auf
+  # internal: true (und skip_updates) zuruecksetzen.
   - platform: modbus_controller
     modbus_controller_id: xy6509
     id: xy6509_device_status
+    name: "WiFi-Status (Test)"
     address: 0x001E
     value_type: U_WORD
     min_value: 0
-    max_value: 4
+    max_value: 5
     step: 1
     multiply: 1
-    internal: true
-    # Dieses Register wird nur geschrieben (per Script/Heartbeat), der
-    # Rueckleseweg ist irrelevant -> selten pollen, um den Bus zu entlasten.
-    skip_updates: 59
+    entity_category: config
 
   # Aktueller Schutz-/Fehlercode, Register 0x0010.
   # Das Register ist laut Protokoll les- und schreibbar. Schreiben von 0

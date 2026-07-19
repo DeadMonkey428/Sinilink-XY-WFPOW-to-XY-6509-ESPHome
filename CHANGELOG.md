@@ -10,12 +10,6 @@ und das Projekt folgt [Semantic Versioning](https://semver.org/lang/de/).
 
 ## [Unreleased]
 
-### Changed
-- `command_throttle` von 10 ms auf 50 ms erhöht, um Read/Write-Kollisionen am
-  Modbus zu reduzieren. Mildert das kurze Zurückspringen von Schaltern/Werten
-  in Home Assistant direkt nach dem Schalten (optimistischer Write vs.
-  verzögerter Geräte-Readback). Noch nicht am Gerät verifiziert.
-
 ## [0.5.0] – 2026-07-19
 
 Erstes getaggtes Release. API-Verschlüsselung ist ab hier verpflichtend.
