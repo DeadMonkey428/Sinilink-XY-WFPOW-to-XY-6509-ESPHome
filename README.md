@@ -138,6 +138,28 @@ esphome run esphome.yaml
   Zudem können **OAH/OWH/OHP** sofort erneut auslösen, weil ihre Zähler
   (Kapazität/Energie/Laufzeit) beim Quittieren nicht zurückgesetzt werden.
 
+## Zu testen (Verifikation am Gerät)
+
+Diese Punkte ließen sich ohne das Gerät nicht prüfen und sind vor dem
+Produktiveinsatz zu verifizieren:
+
+- [ ] **WiFi-Symbol** – Bei bestehender WLAN-Verbindung schreibt die Firmware
+  Wert `4` in `0x001E`. Zeigt das XY-6509-Display dann wirklich das
+  „verbunden"-Symbol (und `3` = „verbindet" beim Trennen)? Falls nicht, die
+  3/4-Zuordnung im Script `xy6509_sync_wifi_display` anpassen.
+- [ ] **Skalierung Energie/Kapazität** – Grenzwerte für **OWH** (`Wh`) und
+  **OAH** (`Ah`) in Home Assistant setzen und am Display gegenprüfen; die
+  Einheiten sind im Datenblatt uneindeutig (Annahme: OWH ×100, OAH ×1000).
+- [ ] **Rohwert-Register** – **MPPT-Koeffizient** (`0x0020`),
+  **Ladeschluss-Strom** (`0x0021`) und **Konstantleistung Wert** (`0x0023`)
+  per Round-Trip prüfen und Einheit/Grenzen ggf. korrigieren.
+- [ ] **Alarm quittieren** – Nach einem Schutzfall den Button drücken: wird
+  der Alarm gelöscht? Bei **OAH/OWH/OHP** beobachten, ob er sofort erneut
+  auslöst (Zähler werden nicht zurückgesetzt).
+- [ ] **Temperatureinheit** – Auswahl „Celsius" setzen und prüfen, ob das
+  Display wirklich `°C` zeigt (0/1-Zuordnung nicht dokumentiert). Alle
+  Temperatur- und Alarmwerte sind fest auf °C ausgelegt.
+
 ## Presets
 
 Der XY-6509 hat 10 Speichergruppen **M0–M9**. Jede Gruppe ist ein Block aus
