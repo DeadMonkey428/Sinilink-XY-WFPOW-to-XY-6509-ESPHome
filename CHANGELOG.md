@@ -10,6 +10,11 @@ und das Projekt folgt [Semantic Versioning](https://semver.org/lang/de/).
 
 ## [Unreleased]
 
+### Added
+- `project:` (Name + Version) im `esphome:`-Block — die Firmware-Version
+  erscheint jetzt in Home Assistant (Geräteinfo) und im Boot-Log. Muss bei
+  jedem Release mit CHANGELOG und Git-Tag synchron gehalten werden.
+
 ## [0.5.1] – 2026-07-19
 
 ### Changed
