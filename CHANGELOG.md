@@ -10,6 +10,11 @@ und das Projekt folgt [Semantic Versioning](https://semver.org/lang/de/).
 
 ## [Unreleased]
 
+### Changed
+- Diagnose-Sensoren **Modellnummer** und **Firmwareversion** pollen wieder im
+  1-s-Takt (vorher `skip_updates: 59` ≈ 60 s), damit sie nach dem Boot ohne
+  Minutenverzögerung erscheinen.
+
 ### Removed
 - **WiFi-Status-Sync** (Schreiben des Verbindungszustands in Register `0x001E`,
   inkl. `on_boot`-/`wifi`-Trigger, Sync-Script und 15-s-Heartbeat). Das
