@@ -35,19 +35,6 @@ Tastensperre, Konstantstrom-Anzeige, Button „Alarm quittieren“.
 wird ins Statusregister des XY-6509 geschrieben, damit dessen WiFi-Symbol
 stimmt.
 
-## Zwei Varianten
-
-Zwei eigenständige, vollständige Konfigurationen – einfach die passende
-kopieren:
-
-| Datei | API |
-|-------|-----|
-| [`esphome.yaml`](esphome.yaml) | **mit** Verschlüsselung (empfohlen für Home Assistant) |
-| [`esphome-no-encryption.yaml`](esphome-no-encryption.yaml) | **ohne** Verschlüsselung |
-
-Beide sind identisch bis auf den `api:`-Block. Immer nur **eine** davon auf
-das Gerät flashen (beide tragen denselben Gerätenamen `sinilink`).
-
 ## Secrets
 
 `secrets.yaml` ist bewusst **nicht** im Repo (siehe `.gitignore`). Lege sie
@@ -64,12 +51,10 @@ ap_password: "mind. 8 Zeichen"
 # OTA-Schutz
 ota_password: "..."
 
-# Nur für esphome.yaml (verschlüsselte Variante) nötig.
+# API-Verschlüsselung (für Home Assistant erforderlich).
 # 32-Byte-Base64-Key, z.B. via `openssl rand -base64 32`
 api_encryption_key: "..."
 ```
-
-Die Variante ohne Verschlüsselung braucht `api_encryption_key` nicht.
 
 ## Installation – Schritt für Schritt
 
@@ -117,8 +102,7 @@ Home Assistant erkennt das ESPHome-Gerät automatisch:
 
 1. Im **ESPHome-Dashboard** das Gerät **übernehmen** („Adopt“ / „Take control“).
 2. **Edit** öffnen und den **gesamten** Inhalt durch
-   [`esphome.yaml`](esphome.yaml) (bzw.
-   [`esphome-no-encryption.yaml`](esphome-no-encryption.yaml)) ersetzen.
+   [`esphome.yaml`](esphome.yaml) ersetzen.
 3. `secrets.yaml` im Dashboard anlegen/ergänzen (siehe [Secrets](#secrets)) –
    **wichtig:** `wifi_ssid`/`wifi_password` müssen zum WLAN aus Schritt 2
    passen, sonst fällt das Gerät nach dem Update aus dem Netz.
@@ -126,8 +110,8 @@ Home Assistant erkennt das ESPHome-Gerät automatisch:
    aufgespielt. Ab jetzt laufen alle weiteren Updates per OTA, kein Adapter
    mehr nötig.
 
-> Bei der **verschlüsselten** Variante fragt Home Assistant beim Übernehmen
-> den `api_encryption_key` ab (Wert aus `secrets.yaml`).
+> Home Assistant fragt beim Übernehmen den `api_encryption_key` ab (Wert aus
+> `secrets.yaml`).
 
 ### Alternative: ESPHome-CLI
 
@@ -135,8 +119,7 @@ Wer die [ESPHome-CLI](https://esphome.io/guides/cli.html) nutzt, kompiliert und
 flasht direkt:
 
 ```bash
-esphome run esphome.yaml                 # mit Verschlüsselung
-esphome run esphome-no-encryption.yaml   # ohne Verschlüsselung
+esphome run esphome.yaml
 ```
 
 ## Hinweise
@@ -146,9 +129,8 @@ esphome run esphome-no-encryption.yaml   # ohne Verschlüsselung
 - **Rettungs-AP:** Bei fehlgeschlagener Station-Verbindung öffnet das Gerät
   den AP „Sinilink Fallback“ + Captive Portal. Ohne diesen wäre das Gerät
   nach einem misslungenen OTA nur per Neu-Flashen erreichbar.
-- **Erste Adoption mit Verschlüsselung:** Nach dem Umstieg auf die
-  verschlüsselte Variante muss das Gerät in Home Assistant einmal neu
-  adoptiert werden (API-Key wird abgefragt). Das ist normal.
+- **Erste Adoption:** Beim Übernehmen in Home Assistant wird der
+  `api_encryption_key` abgefragt (Wert aus `secrets.yaml`). Das ist normal.
 - **Alarm quittieren (experimentell):** Der Button schreibt `0` in das
   Schutzregister `0x0010`. Das Protokoll dokumentiert nur die *gelesenen*
   Fehlercodes, nicht ausdrücklich, dass Schreiben von `0` einem Tastendruck

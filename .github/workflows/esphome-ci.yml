@@ -1,8 +1,8 @@
 name: ESPHome CI
 
-# Validiert beide Varianten (Struktur) und kompiliert eine davon, um auch
-# den C++-Lambda-Code (Preset speichern) zu pruefen. Laeuft nur, wenn sich
-# YAML oder der Workflow selbst aendert - nicht bei reinen README-Aenderungen.
+# Validiert die Konfiguration (Struktur) und kompiliert sie, um auch den
+# C++-Lambda-Code (Preset speichern) zu pruefen. Laeuft nur, wenn sich YAML
+# oder der Workflow selbst aendert - nicht bei reinen README-Aenderungen.
 on:
   push:
     branches: [main]
@@ -56,13 +56,10 @@ jobs:
             echo "api_encryption_key: \"$(openssl rand -base64 32)\""
           } > secrets.yaml
 
-      # Struktur/Schema beider Varianten pruefen (schnell).
+      # Struktur/Schema pruefen (schnell).
       - name: Konfiguration validieren
-        run: |
-          esphome config esphome.yaml
-          esphome config esphome-no-encryption.yaml
+        run: esphome config esphome.yaml
 
-      # Einmal kompilieren - prueft den gemeinsamen C++-Lambda-Code.
-      # Beide Varianten teilen denselben Code, daher genuegt eine.
+      # Kompilieren - prueft den C++-Lambda-Code (Preset speichern).
       - name: Kompilieren (prueft Lambda/C++)
         run: esphome compile esphome.yaml
