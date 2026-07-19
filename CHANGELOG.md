@@ -10,6 +10,8 @@ und das Projekt folgt [Semantic Versioning](https://semver.org/lang/de/).
 
 ## [Unreleased]
 
+## [0.5.1] – 2026-07-19
+
 ### Changed
 - Diagnose-Sensoren **Modellnummer** und **Firmwareversion** pollen wieder im
   1-s-Takt (vorher `skip_updates: 59` ≈ 60 s), damit sie nach dem Boot ohne
@@ -104,5 +106,6 @@ Grundkonfiguration (Ausgangsstand des Projekts).
   quittieren", Konstantstrom- und Tastensperre-Anzeige.
 - **WiFi-Status-Sync** aufs XY-6509-Display und Status-LED.
 
-[Unreleased]: https://github.com/DeadMonkey428/Sinilink-XY-WFPOW-to-XY-6509-ESPHome/compare/v0.5.0...HEAD
+[Unreleased]: https://github.com/DeadMonkey428/Sinilink-XY-WFPOW-to-XY-6509-ESPHome/compare/v0.5.1...HEAD
+[0.5.1]: https://github.com/DeadMonkey428/Sinilink-XY-WFPOW-to-XY-6509-ESPHome/compare/v0.5.0...v0.5.1
 [0.5.0]: https://github.com/DeadMonkey428/Sinilink-XY-WFPOW-to-XY-6509-ESPHome/releases/tag/v0.5.0
