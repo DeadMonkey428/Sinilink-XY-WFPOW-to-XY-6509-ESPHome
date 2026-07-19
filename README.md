@@ -16,8 +16,8 @@ Modell- und Firmwareversion.
 
 **Steuerung** – Sollspannung, Strombegrenzung, Ausgang ein/aus,
 Auto-Einschalten nach Gerätestart, Displayhelligkeit, Display-Ausschaltzeit,
-Summer, Tastensperre, MPPT- und Konstantleistungs-Modus sowie Presets M0–M9
-**laden und speichern** (siehe [Presets](#presets)).
+Summer, Tastensperre, Temperatureinheit, MPPT- und Konstantleistungs-Modus
+sowie Presets M0–M9 **laden und speichern** (siehe [Presets](#presets)).
 
 **Kalibrierung** – Offset für interne und externe Temperatur, damit reale
 Sensorabweichungen ausgeglichen werden können.
@@ -149,6 +149,12 @@ esphome run esphome-no-encryption.yaml   # ohne Verschlüsselung
 - **Erste Adoption mit Verschlüsselung:** Nach dem Umstieg auf die
   verschlüsselte Variante muss das Gerät in Home Assistant einmal neu
   adoptiert werden (API-Key wird abgefragt). Das ist normal.
+- **Alarm quittieren (experimentell):** Der Button schreibt `0` in das
+  Schutzregister `0x0010`. Das Protokoll dokumentiert nur die *gelesenen*
+  Fehlercodes, nicht ausdrücklich, dass Schreiben von `0` einem Tastendruck
+  entspricht – getestet auf XY-6509-Firmware **`v?` (bitte eintragen)**.
+  Zudem können **OAH/OWH/OHP** sofort erneut auslösen, weil ihre Zähler
+  (Kapazität/Energie/Laufzeit) beim Quittieren nicht zurückgesetzt werden.
 
 ## Presets
 
@@ -188,8 +194,13 @@ Das vollständige Protokoll liegt als PDF im Repo:
 > (`0x0021`) und **Konstantleistung Wert** (`0x0023`) gibt das Datenblatt keine
 > eindeutige Einheit/Skalierung an – diese Entities zeigen den **Rohwert**.
 > Vor dem Produktiveinsatz per Round-Trip (Wert setzen → am Gerät prüfen)
-> verifizieren und die Grenzen ggf. anpassen. Die `°C/°F`-Umschaltung
-> (`0x0013`) ist bewusst **nicht** schreibbar – bitte am Gerät auf °C stellen.
+> verifizieren und die Grenzen ggf. anpassen.
+
+**Temperatureinheit (`0x0013`):** Als Auswahl „Temperatureinheit"
+(Celsius/Fahrenheit) verfügbar. **Alle** Temperatur- und Alarm-Entitäten sind
+fest auf **°C** ausgelegt – das Gerät muss auf Celsius stehen, sonst sind die
+Werte falsch beschriftet. Die `0`/`1`-Zuordnung ist im Protokoll nicht
+dokumentiert und am Gerät zu verifizieren (Auswahl „Celsius" → Display `°C`).
 
 ## Hardware
 

@@ -20,6 +20,9 @@ logger:
   baud_rate: 0
 
 api:
+  # Kein Auto-Neustart bei fehlender HA-Verbindung (Default: 15 min) -
+  # fuer ein steuerbares Netzteil unerwuenscht.
+  reboot_timeout: 0s
 
 ota:
   - platform: esphome
@@ -172,12 +175,12 @@ number:
     icon: "mdi:current-dc"
     mode: box
     min_value: 0.000
-    max_value: 9.200
+    max_value: 9.000
     step: 0.001
     multiply: 1000
 
   # Displayhelligkeit, Register 0x0014.
-  # Laut Handbuch sind die Stufen 1 bis 5 vorgesehen.
+  # Laut Handbuch Stufen 0 bis 5 (0 = dunkelste, 5 = hellste).
   - platform: modbus_controller
     modbus_controller_id: xy6509
     id: xy6509_display_brightness
@@ -186,7 +189,7 @@ number:
     value_type: U_WORD
     icon: "mdi:brightness-6"
     mode: slider
-    min_value: 1
+    min_value: 0
     max_value: 5
     step: 1
     multiply: 1
@@ -883,6 +886,24 @@ select:
       - "M7"
       - "M8"
       - "M9"
+
+  # Temperatureinheit des Geraets, Register 0x0013 (R/W).
+  # ACHTUNG: alle Temperatur- und Alarm-Entities sind fest auf Celsius
+  # ausgelegt (Units/Skalierung). Steht das Geraet auf Fahrenheit, sind
+  # diese Werte falsch beschriftet - daher auf Celsius stellen.
+  # Die 0/1-Zuordnung ist im Protokoll nicht dokumentiert; am Geraet
+  # verifizieren (Auswahl "Celsius" sollte am Display °C zeigen).
+  - platform: modbus_controller
+    modbus_controller_id: xy6509
+    id: xy6509_temperature_unit
+    name: "Temperatureinheit"
+    address: 0x0013
+    value_type: U_WORD
+    icon: "mdi:temperature-celsius"
+    entity_category: config
+    optionsmap:
+      "Celsius": 0
+      "Fahrenheit": 1
 
 # ---------------------------------------------------------------------------
 # Messwerte
