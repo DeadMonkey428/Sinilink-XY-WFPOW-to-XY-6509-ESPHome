@@ -148,7 +148,11 @@ modbus_controller:
   - id: xy6509
     address: 0x01
     modbus_id: xy6509_modbus
-    command_throttle: 10ms
+    # Etwas Luft zwischen den Modbus-Transaktionen. Das XY-6509 fuehrt einen
+    # Schreibvorgang im Rueckleseweg verzoegert nach; mit 10 ms sprangen
+    # Schalter/Werte in HA direkt nach dem Schalten kurz zurueck. Bei Bedarf
+    # weiter erhoehen (bis ~200 ms) - Nebeneffekt: langsamere Sensor-Updates.
+    command_throttle: 50ms
     update_interval: 1s
     setup_priority: -10
 
