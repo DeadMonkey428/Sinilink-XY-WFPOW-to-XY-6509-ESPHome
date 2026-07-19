@@ -152,7 +152,7 @@ esphome run esphome-no-encryption.yaml   # ohne Verschlüsselung
 - **Alarm quittieren (experimentell):** Der Button schreibt `0` in das
   Schutzregister `0x0010`. Das Protokoll dokumentiert nur die *gelesenen*
   Fehlercodes, nicht ausdrücklich, dass Schreiben von `0` einem Tastendruck
-  entspricht – getestet auf XY-6509-Firmware **`v?` (bitte eintragen)**.
+  entspricht – getestet aber unsicher.
   Zudem können **OAH/OWH/OHP** sofort erneut auslösen, weil ihre Zähler
   (Kapazität/Energie/Laufzeit) beim Quittieren nicht zurückgesetzt werden.
 

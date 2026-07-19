@@ -116,6 +116,14 @@ interval:
           else:
             - output.turn_off: led
 
+  # Heartbeat: WiFi-Status regelmaessig ans XY-6509 auffrischen, falls dessen
+  # Firmware das Symbol bei ausbleibender Aktualisierung ausblendet. Nutzt
+  # dasselbe Script wie Boot/Connect/Disconnect (mode: restart -> keine
+  # Ueberschneidung).
+  - interval: 15s
+    then:
+      - script.execute: xy6509_sync_wifi_display
+
 # ---------------------------------------------------------------------------
 # XY-6509 Modbus RTU
 # ---------------------------------------------------------------------------
@@ -209,6 +217,9 @@ number:
     step: 1
     multiply: 1
     internal: true
+    # Dieses Register wird nur geschrieben (per Script/Heartbeat), der
+    # Rueckleseweg ist irrelevant -> selten pollen, um den Bus zu entlasten.
+    skip_updates: 59
 
   # Aktueller Schutz-/Fehlercode, Register 0x0010.
   # Das Register ist laut Protokoll les- und schreibbar. Schreiben von 0
