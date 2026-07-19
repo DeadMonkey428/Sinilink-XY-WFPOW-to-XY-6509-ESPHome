@@ -10,6 +10,12 @@ und das Projekt folgt [Semantic Versioning](https://semver.org/lang/de/).
 
 ## [Unreleased]
 
+### Removed
+- **WiFi-Status-Sync** (Schreiben des Verbindungszustands in Register `0x001E`,
+  inkl. `on_boot`-/`wifi`-Trigger, Sync-Script und 15-s-Heartbeat). Das
+  Schreiben in dieses undokumentierte Register löste am XY-6509 unerwünschtes
+  Verhalten aus (Ausgang schaltete nach dem Einschalten wieder ab).
+
 ## [0.5.0] – 2026-07-19
 
 Erstes getaggtes Release. API-Verschlüsselung ist ab hier verpflichtend.

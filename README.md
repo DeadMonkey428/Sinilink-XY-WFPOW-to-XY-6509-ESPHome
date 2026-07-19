@@ -31,10 +31,6 @@ der den zuletzt gesetzten Grenzwert merkt und wiederherstellt.
 **Status** – Schutzstatus als Klartext, „Schutzabschaltung aktiv“-Sensor,
 Tastensperre, Konstantstrom-Anzeige, Button „Alarm quittieren“.
 
-**WiFi-Status auf dem XY-6509-Display** – der Verbindungszustand von ESPHome
-wird ins Statusregister des XY-6509 geschrieben, damit dessen WiFi-Symbol
-stimmt.
-
 ## Secrets
 
 `secrets.yaml` ist bewusst **nicht** im Repo (siehe `.gitignore`). Lege sie
@@ -143,10 +139,6 @@ esphome run esphome.yaml
 Diese Punkte ließen sich ohne das Gerät nicht prüfen und sind vor dem
 Produktiveinsatz zu verifizieren:
 
-- [ ] **WiFi-Symbol** – Bei bestehender WLAN-Verbindung schreibt die Firmware
-  Wert `4` in `0x001E`. Zeigt das XY-6509-Display dann wirklich das
-  „verbunden"-Symbol (und `3` = „verbindet" beim Trennen)? Falls nicht, die
-  3/4-Zuordnung im Script `xy6509_sync_wifi_display` anpassen.
 - [ ] **Skalierung Energie/Kapazität** – Grenzwerte für **OWH** (`Wh`) und
   **OAH** (`Ah`) in Home Assistant setzen und am Display gegenprüfen; die
   Einheiten sind im Datenblatt uneindeutig (Annahme: OWH ×100, OAH ×1000).
