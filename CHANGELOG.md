@@ -10,6 +10,12 @@ und das Projekt folgt [Semantic Versioning](https://semver.org/lang/de/).
 
 ## [Unreleased]
 
+### Fixed
+- Modbus-`send_wait_time` von 5 ms auf 100 ms erhöht. Das XY-6509 antwortet
+  erst nach ~34 ms; mit 5 ms lief ESPHome in Timeouts und verwarf verspätete
+  Antworten (`unexpected frame`, `Stop waiting for response`) → träge/lückenhafte
+  Messwert-Updates. Behebt u.a. das verzögerte Aktualisieren der Spannung.
+
 ### Added
 - **Profil-Viewer:** Dropdown „Profil anzeigen" (M0–M9) liest den Register-Block
   des gewählten Profils (`0x0050 + Mx·0x10`) einmalig aus und zeigt dessen

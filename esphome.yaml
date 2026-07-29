@@ -100,7 +100,11 @@ uart:
 modbus:
   id: xy6509_modbus
   uart_id: xy6509_uart
-  send_wait_time: 5ms
+  # Das XY-6509 antwortet erst nach ~30-35 ms. Mit zu kurzem Wert lief ESPHome
+  # in Timeouts und verwarf verspaetete Antworten ("unexpected frame") ->
+  # traege/lueckenhafte Updates. 100 ms gibt Reserve; erfolgreiche Antworten
+  # werden sofort verarbeitet, also kein Tempoverlust.
+  send_wait_time: 100ms
 
 modbus_controller:
   - id: xy6509
