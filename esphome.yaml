@@ -860,6 +860,66 @@ select:
       "Celsius": 0
       "Fahrenheit": 1
 
+  # Profil-Viewer: Profil M0-M9 waehlen -> liest dessen 15-Register-Block
+  # (Basis 0x0050 + Mx*0x10) einmalig aus und schiebt die Werte in die
+  # nur-lesenden "Profil: ..."-Sensoren/-Binaersensoren. Reines Ansehen -
+  # kein Laden, kein Schreiben (anders als "Preset laden").
+  - platform: template
+    id: xy6509_profile_view
+    name: "Profil anzeigen"
+    icon: "mdi:eye-settings-outline"
+    optimistic: true
+    restore_value: true
+    initial_option: "M0"
+    options:
+      - "M0"
+      - "M1"
+      - "M2"
+      - "M3"
+      - "M4"
+      - "M5"
+      - "M6"
+      - "M7"
+      - "M8"
+      - "M9"
+    on_value:
+      then:
+        - lambda: |-
+            const auto idx = id(xy6509_profile_view).active_index();
+            if (!idx.has_value()) return;
+            const uint16_t base =
+                0x0050 + static_cast<uint16_t>(idx.value()) * 0x0010;
+
+            auto handler = [](esphome::modbus_controller::ModbusRegisterType,
+                              uint16_t, const std::vector<uint8_t> &data) {
+              if (data.size() < 30) return;  // 15 Register * 2 Byte
+              auto w = [&](int i) -> uint16_t {
+                return (static_cast<uint16_t>(data[2 * i]) << 8) | data[2 * i + 1];
+              };
+              // OAH/OWH sind U_DWORD_R -> Low-Word zuerst.
+              const uint32_t oah = (static_cast<uint32_t>(w(9)) << 16) | w(8);
+              const uint32_t owh = (static_cast<uint32_t>(w(11)) << 16) | w(10);
+              id(xy6509_profile_voltage).publish_state(w(0) / 100.0f);
+              id(xy6509_profile_current).publish_state(w(1) / 1000.0f);
+              id(xy6509_profile_lvp).publish_state(w(2) / 100.0f);
+              id(xy6509_profile_ovp).publish_state(w(3) / 100.0f);
+              id(xy6509_profile_ocp).publish_state(w(4) / 1000.0f);
+              id(xy6509_profile_opp).publish_state(w(5) / 10.0f);
+              id(xy6509_profile_ohp).publish_state(w(6) * 60.0f + w(7));
+              id(xy6509_profile_oah).publish_state(oah / 1000.0f);
+              id(xy6509_profile_owh).publish_state(owh / 100.0f);
+              id(xy6509_profile_otp).publish_state(w(12));
+              id(xy6509_profile_etp).publish_state(w(14));
+              id(xy6509_profile_power_on).publish_state(w(13) != 0);
+            };
+
+            auto cmd = esphome::modbus_controller::ModbusCommandItem::
+                create_read_command(
+                    id(xy6509),
+                    esphome::modbus_controller::ModbusRegisterType::HOLDING,
+                    base, 15, std::move(handler));
+            id(xy6509)->queue_command(cmd);
+
 # ---------------------------------------------------------------------------
 # Messwerte
 # ---------------------------------------------------------------------------
@@ -1038,6 +1098,89 @@ sensor:
     value_type: U_WORD
     entity_category: diagnostic
 
+  # -------------------------------------------------------------------------
+  # Profil-Viewer: nur-lesende Werte des oben gewaehlten Profils.
+  # Gefuellt ausschliesslich per publish_state aus dem Select "Profil anzeigen".
+  # -------------------------------------------------------------------------
+  - platform: template
+    id: xy6509_profile_voltage
+    name: "Profil: Sollspannung"
+    unit_of_measurement: "V"
+    device_class: voltage
+    accuracy_decimals: 2
+    icon: "mdi:sine-wave"
+
+  - platform: template
+    id: xy6509_profile_current
+    name: "Profil: Strombegrenzung"
+    unit_of_measurement: "A"
+    device_class: current
+    accuracy_decimals: 3
+    icon: "mdi:current-dc"
+
+  - platform: template
+    id: xy6509_profile_lvp
+    name: "Profil: Alarmgrenze Unterspannung (LVP)"
+    unit_of_measurement: "V"
+    accuracy_decimals: 2
+    icon: "mdi:flash-triangle-outline"
+
+  - platform: template
+    id: xy6509_profile_ovp
+    name: "Profil: Alarmgrenze Überspannung (OVP)"
+    unit_of_measurement: "V"
+    accuracy_decimals: 2
+    icon: "mdi:flash-triangle"
+
+  - platform: template
+    id: xy6509_profile_ocp
+    name: "Profil: Alarmgrenze Überstrom (OCP)"
+    unit_of_measurement: "A"
+    accuracy_decimals: 3
+    icon: "mdi:current-dc"
+
+  - platform: template
+    id: xy6509_profile_opp
+    name: "Profil: Alarmgrenze Überleistung (OPP)"
+    unit_of_measurement: "W"
+    accuracy_decimals: 1
+    icon: "mdi:lightning-bolt"
+
+  - platform: template
+    id: xy6509_profile_ohp
+    name: "Profil: Alarmgrenze Laufzeit (OHP)"
+    unit_of_measurement: "min"
+    accuracy_decimals: 0
+    icon: "mdi:timer-alert-outline"
+
+  - platform: template
+    id: xy6509_profile_oah
+    name: "Profil: Alarmgrenze Kapazität (OAH)"
+    unit_of_measurement: "Ah"
+    accuracy_decimals: 3
+    icon: "mdi:battery-alert-variant-outline"
+
+  - platform: template
+    id: xy6509_profile_owh
+    name: "Profil: Alarmgrenze Energie (OWH)"
+    unit_of_measurement: "Wh"
+    accuracy_decimals: 2
+    icon: "mdi:lightning-bolt-circle"
+
+  - platform: template
+    id: xy6509_profile_otp
+    name: "Profil: Alarmgrenze interne Temperatur (OTP)"
+    unit_of_measurement: "°C"
+    accuracy_decimals: 0
+    icon: "mdi:thermometer-alert"
+
+  - platform: template
+    id: xy6509_profile_etp
+    name: "Profil: Alarmgrenze externe Temperatur (ETP)"
+    unit_of_measurement: "°C"
+    accuracy_decimals: 0
+    icon: "mdi:thermometer-probe"
+
 # ---------------------------------------------------------------------------
 # Statuswerte
 # ---------------------------------------------------------------------------
@@ -1051,6 +1194,12 @@ binary_sensor:
     register_type: holding
     bitmask: 0x0001
     icon: "mdi:current-dc"
+
+  # Profil-Viewer: "Ausgang nach Gerätestart" (S-INI) des gewaehlten Profils.
+  - platform: template
+    id: xy6509_profile_power_on
+    name: "Profil: Ausgang nach Gerätestart"
+    icon: "mdi:power-cycle"
 
   - platform: template
     id: xy6509_alarm_active
