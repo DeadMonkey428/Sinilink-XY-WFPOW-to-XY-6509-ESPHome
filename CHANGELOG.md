@@ -10,6 +10,8 @@ und das Projekt folgt [Semantic Versioning](https://semver.org/lang/de/).
 
 ## [Unreleased]
 
+## [0.5.2] – 2026-07-19
+
 ### Fixed
 - Modbus-`send_wait_time` von 5 ms auf 100 ms erhöht. Das XY-6509 antwortet
   erst nach ~34 ms; mit 5 ms lief ESPHome in Timeouts und verwarf verspätete
@@ -128,6 +130,7 @@ Grundkonfiguration (Ausgangsstand des Projekts).
   quittieren", Konstantstrom- und Tastensperre-Anzeige.
 - **WiFi-Status-Sync** aufs XY-6509-Display und Status-LED.
 
-[Unreleased]: https://github.com/DeadMonkey428/Sinilink-XY-WFPOW-to-XY-6509-ESPHome/compare/v0.5.1...HEAD
+[Unreleased]: https://github.com/DeadMonkey428/Sinilink-XY-WFPOW-to-XY-6509-ESPHome/compare/v0.5.2...HEAD
+[0.5.2]: https://github.com/DeadMonkey428/Sinilink-XY-WFPOW-to-XY-6509-ESPHome/compare/v0.5.1...v0.5.2
 [0.5.1]: https://github.com/DeadMonkey428/Sinilink-XY-WFPOW-to-XY-6509-ESPHome/compare/v0.5.0...v0.5.1
 [0.5.0]: https://github.com/DeadMonkey428/Sinilink-XY-WFPOW-to-XY-6509-ESPHome/releases/tag/v0.5.0
