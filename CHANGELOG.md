@@ -10,7 +10,7 @@ und das Projekt folgt [Semantic Versioning](https://semver.org/lang/de/).
 
 ## [Unreleased]
 
-## [0.5.2] – 2026-07-19
+## [0.5.2] – 2026-08-04
 
 ### Fixed
 - Modbus-`send_wait_time` von 5 ms auf 100 ms erhöht. Das XY-6509 antwortet
@@ -34,7 +34,7 @@ und das Projekt folgt [Semantic Versioning](https://semver.org/lang/de/).
   Der Profil-Editor bearbeitet jeden Slot direkt; das separate Speichern der
   aktiven Werte in einen Slot ist damit überflüssig.
 
-## [0.5.1] – 2026-07-19
+## [0.5.1] – 2026-08-04
 
 ### Changed
 - Diagnose-Sensoren **Modellnummer** und **Firmwareversion** pollen wieder im
@@ -47,7 +47,7 @@ und das Projekt folgt [Semantic Versioning](https://semver.org/lang/de/).
   Schreiben in dieses undokumentierte Register löste am XY-6509 unerwünschtes
   Verhalten aus (Ausgang schaltete nach dem Einschalten wieder ab).
 
-## [0.5.0] – 2026-07-19
+## [0.5.0] – 2026-08-04
 
 Erstes getaggtes Release. API-Verschlüsselung ist ab hier verpflichtend.
 
@@ -63,7 +63,7 @@ Erstes getaggtes Release. API-Verschlüsselung ist ab hier verpflichtend.
 - Variante ohne API-Verschlüsselung (`esphome-no-encryption.yaml`) und alle
   Verweise darauf.
 
-## [0.4.0] – 2026-07-19
+## [0.4.0] – 2026-08-04
 
 Korrekturen aus dem Pre-Release-Review und Robustheit des WiFi-Status.
 
@@ -79,7 +79,7 @@ Korrekturen aus dem Pre-Release-Review und Robustheit des WiFi-Status.
   die XY-6509-Firmware ein periodisches Update erwartet.
 - `api: reboot_timeout: 0s` – kein Auto-Neustart bei fehlender HA-Verbindung.
 
-## [0.3.0] – 2026-07-18
+## [0.3.0] – 2026-08-04
 
 Presets speichern, restliche Gerätefunktionen und CI.
 
@@ -99,7 +99,7 @@ Presets speichern, restliche Gerätefunktionen und CI.
 - **Tastensperre** von read-only (`binary_sensor`) auf schreibbaren `switch`
   umgestellt.
 
-## [0.2.0] – 2026-07-18
+## [0.2.0] – 2026-08-04
 
 Sicherheit, Recovery und Dokumentation.
 
@@ -113,7 +113,7 @@ Sicherheit, Recovery und Dokumentation.
 ### Security
 - Native-**API-Verschlüsselung**, **OTA-Passwort**, `min_auth_mode: WPA2`.
 
-## [0.1.0] – 2026-07-18
+## [0.1.0] – 2026-08-04
 
 Grundkonfiguration (Ausgangsstand des Projekts).
 
