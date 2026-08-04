@@ -17,11 +17,12 @@ und das Projekt folgt [Semantic Versioning](https://semver.org/lang/de/).
   Messwert-Updates. Behebt u.a. das verzögerte Aktualisieren der Spannung.
 
 ### Added
-- **Profil-Viewer:** Dropdown „Profil anzeigen" (M0–M9) liest den Register-Block
-  des gewählten Profils (`0x0050 + Mx·0x10`) einmalig aus und zeigt dessen
-  gespeicherte Werte (Sollspannung, Strombegrenzung, alle Schutzgrenzen,
-  „Ausgang nach Gerätestart") in **nur-lesenden** „Profil: …"-Entitäten – ohne
-  das Profil zu laden.
+- **Profil-Editor:** Dropdown „Profil anzeigen" (M0–M9) liest den Register-Block
+  des gewählten Profils (`0x0050 + Mx·0x10`) und zeigt dessen Werte
+  (Sollspannung, Strombegrenzung, alle Schutzgrenzen, „Ausgang nach
+  Gerätestart") als **editierbare** „Profil: …"-`number`-Entitäten. Jede
+  Änderung wird sofort in den gewählten Slot geschrieben – ohne das Profil zu
+  laden. (M1/M2 = Tasten-Presets des Geräts.)
 - `project:` (Name + Version) im `esphome:`-Block — die Firmware-Version
   erscheint jetzt in Home Assistant (Geräteinfo) und im Boot-Log. Muss bei
   jedem Release mit CHANGELOG und Git-Tag synchron gehalten werden.

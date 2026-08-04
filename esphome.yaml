@@ -503,6 +503,285 @@ number:
     multiply: 1
     entity_category: config
 
+  # -------------------------------------------------------------------------
+  # Profil-Editor: Werte des in "Profil anzeigen" gewaehlten Slots M0-M9.
+  # Lesen: per Block-Read (Select-Trigger -> publish_state).
+  # Schreiben: jede Aenderung geht SOFORT in "0x0050 + Slot*0x10 + Offset" des
+  # aktuell gewaehlten Slots. Dynamische Adresse -> Template-numbers
+  # (optimistic), kein Polling -> kein Zurueckspringen.
+  # ACHTUNG: schreibt direkt in den Geraete-Slot (M1/M2 = Tasten-Presets!).
+  # -------------------------------------------------------------------------
+  - platform: template
+    id: xy6509_profile_voltage
+    name: "Profil: Sollspannung"
+    unit_of_measurement: "V"
+    device_class: voltage
+    icon: "mdi:sine-wave"
+    mode: box
+    min_value: 0.60
+    max_value: 65.00
+    step: 0.01
+    optimistic: true
+    set_action:
+      - lambda: |-
+          const auto idx = id(xy6509_profile_view).active_index();
+          if (!idx.has_value()) return;
+          const uint16_t base =
+              0x0050 + static_cast<uint16_t>(idx.value()) * 0x0010;
+          id(xy6509)->queue_command(
+              esphome::modbus_controller::ModbusCommandItem::
+                  create_write_single_command(
+                      id(xy6509), base + 0x0000,
+                      static_cast<uint16_t>(lroundf(x * 100.0f))));
+
+  - platform: template
+    id: xy6509_profile_current
+    name: "Profil: Strombegrenzung"
+    unit_of_measurement: "A"
+    device_class: current
+    icon: "mdi:current-dc"
+    mode: box
+    min_value: 0.000
+    max_value: 9.000
+    step: 0.001
+    optimistic: true
+    set_action:
+      - lambda: |-
+          const auto idx = id(xy6509_profile_view).active_index();
+          if (!idx.has_value()) return;
+          const uint16_t base =
+              0x0050 + static_cast<uint16_t>(idx.value()) * 0x0010;
+          id(xy6509)->queue_command(
+              esphome::modbus_controller::ModbusCommandItem::
+                  create_write_single_command(
+                      id(xy6509), base + 0x0001,
+                      static_cast<uint16_t>(lroundf(x * 1000.0f))));
+
+  - platform: template
+    id: xy6509_profile_lvp
+    name: "Profil: Alarmgrenze Unterspannung (LVP)"
+    unit_of_measurement: "V"
+    icon: "mdi:flash-triangle-outline"
+    mode: box
+    min_value: 10.00
+    max_value: 75.00
+    step: 0.01
+    optimistic: true
+    set_action:
+      - lambda: |-
+          const auto idx = id(xy6509_profile_view).active_index();
+          if (!idx.has_value()) return;
+          const uint16_t base =
+              0x0050 + static_cast<uint16_t>(idx.value()) * 0x0010;
+          id(xy6509)->queue_command(
+              esphome::modbus_controller::ModbusCommandItem::
+                  create_write_single_command(
+                      id(xy6509), base + 0x0002,
+                      static_cast<uint16_t>(lroundf(x * 100.0f))));
+
+  - platform: template
+    id: xy6509_profile_ovp
+    name: "Profil: Alarmgrenze Überspannung (OVP)"
+    unit_of_measurement: "V"
+    icon: "mdi:flash-triangle"
+    mode: box
+    min_value: 0.00
+    max_value: 67.00
+    step: 0.01
+    optimistic: true
+    set_action:
+      - lambda: |-
+          const auto idx = id(xy6509_profile_view).active_index();
+          if (!idx.has_value()) return;
+          const uint16_t base =
+              0x0050 + static_cast<uint16_t>(idx.value()) * 0x0010;
+          id(xy6509)->queue_command(
+              esphome::modbus_controller::ModbusCommandItem::
+                  create_write_single_command(
+                      id(xy6509), base + 0x0003,
+                      static_cast<uint16_t>(lroundf(x * 100.0f))));
+
+  - platform: template
+    id: xy6509_profile_ocp
+    name: "Profil: Alarmgrenze Überstrom (OCP)"
+    unit_of_measurement: "A"
+    icon: "mdi:current-dc"
+    mode: box
+    min_value: 0.000
+    max_value: 9.200
+    step: 0.001
+    optimistic: true
+    set_action:
+      - lambda: |-
+          const auto idx = id(xy6509_profile_view).active_index();
+          if (!idx.has_value()) return;
+          const uint16_t base =
+              0x0050 + static_cast<uint16_t>(idx.value()) * 0x0010;
+          id(xy6509)->queue_command(
+              esphome::modbus_controller::ModbusCommandItem::
+                  create_write_single_command(
+                      id(xy6509), base + 0x0004,
+                      static_cast<uint16_t>(lroundf(x * 1000.0f))));
+
+  - platform: template
+    id: xy6509_profile_opp
+    name: "Profil: Alarmgrenze Überleistung (OPP)"
+    unit_of_measurement: "W"
+    icon: "mdi:lightning-bolt"
+    mode: box
+    min_value: 0.0
+    max_value: 650.0
+    step: 0.1
+    optimistic: true
+    set_action:
+      - lambda: |-
+          const auto idx = id(xy6509_profile_view).active_index();
+          if (!idx.has_value()) return;
+          const uint16_t base =
+              0x0050 + static_cast<uint16_t>(idx.value()) * 0x0010;
+          id(xy6509)->queue_command(
+              esphome::modbus_controller::ModbusCommandItem::
+                  create_write_single_command(
+                      id(xy6509), base + 0x0005,
+                      static_cast<uint16_t>(lroundf(x * 10.0f))));
+
+  - platform: template
+    id: xy6509_profile_ohp
+    name: "Profil: Alarmgrenze Laufzeit (OHP)"
+    unit_of_measurement: "min"
+    icon: "mdi:timer-alert-outline"
+    mode: box
+    min_value: 0
+    max_value: 5999
+    step: 1
+    optimistic: true
+    set_action:
+      - lambda: |-
+          const auto idx = id(xy6509_profile_view).active_index();
+          if (!idx.has_value()) return;
+          const uint16_t base =
+              0x0050 + static_cast<uint16_t>(idx.value()) * 0x0010;
+          const int total = static_cast<int>(lroundf(x));
+          const std::vector<uint16_t> vals = {
+              static_cast<uint16_t>(total / 60),
+              static_cast<uint16_t>(total % 60)};
+          id(xy6509)->queue_command(
+              esphome::modbus_controller::ModbusCommandItem::
+                  create_write_multiple_command(id(xy6509), base + 0x0006, 2, vals));
+
+  - platform: template
+    id: xy6509_profile_oah
+    name: "Profil: Alarmgrenze Kapazität (OAH)"
+    unit_of_measurement: "Ah"
+    icon: "mdi:battery-alert-variant-outline"
+    mode: box
+    min_value: 0.000
+    max_value: 9999.000
+    step: 0.001
+    optimistic: true
+    set_action:
+      - lambda: |-
+          const auto idx = id(xy6509_profile_view).active_index();
+          if (!idx.has_value()) return;
+          const uint16_t base =
+              0x0050 + static_cast<uint16_t>(idx.value()) * 0x0010;
+          const uint32_t raw = static_cast<uint32_t>(lroundf(x * 1000.0f));
+          const std::vector<uint16_t> vals = {
+              static_cast<uint16_t>(raw & 0xFFFF),
+              static_cast<uint16_t>(raw >> 16)};
+          id(xy6509)->queue_command(
+              esphome::modbus_controller::ModbusCommandItem::
+                  create_write_multiple_command(id(xy6509), base + 0x0008, 2, vals));
+
+  - platform: template
+    id: xy6509_profile_owh
+    name: "Profil: Alarmgrenze Energie (OWH)"
+    unit_of_measurement: "Wh"
+    icon: "mdi:lightning-bolt-circle"
+    mode: box
+    min_value: 0.00
+    max_value: 4200000.00
+    step: 0.01
+    optimistic: true
+    set_action:
+      - lambda: |-
+          const auto idx = id(xy6509_profile_view).active_index();
+          if (!idx.has_value()) return;
+          const uint16_t base =
+              0x0050 + static_cast<uint16_t>(idx.value()) * 0x0010;
+          const uint32_t raw = static_cast<uint32_t>(lroundf(x * 100.0f));
+          const std::vector<uint16_t> vals = {
+              static_cast<uint16_t>(raw & 0xFFFF),
+              static_cast<uint16_t>(raw >> 16)};
+          id(xy6509)->queue_command(
+              esphome::modbus_controller::ModbusCommandItem::
+                  create_write_multiple_command(id(xy6509), base + 0x000A, 2, vals));
+
+  - platform: template
+    id: xy6509_profile_otp
+    name: "Profil: Alarmgrenze interne Temperatur (OTP)"
+    unit_of_measurement: "°C"
+    icon: "mdi:thermometer-alert"
+    mode: box
+    min_value: 0
+    max_value: 110
+    step: 1
+    optimistic: true
+    set_action:
+      - lambda: |-
+          const auto idx = id(xy6509_profile_view).active_index();
+          if (!idx.has_value()) return;
+          const uint16_t base =
+              0x0050 + static_cast<uint16_t>(idx.value()) * 0x0010;
+          id(xy6509)->queue_command(
+              esphome::modbus_controller::ModbusCommandItem::
+                  create_write_single_command(
+                      id(xy6509), base + 0x000C,
+                      static_cast<uint16_t>(lroundf(x))));
+
+  - platform: template
+    id: xy6509_profile_etp
+    name: "Profil: Alarmgrenze externe Temperatur (ETP)"
+    unit_of_measurement: "°C"
+    icon: "mdi:thermometer-probe"
+    mode: box
+    min_value: 0
+    max_value: 110
+    step: 1
+    optimistic: true
+    set_action:
+      - lambda: |-
+          const auto idx = id(xy6509_profile_view).active_index();
+          if (!idx.has_value()) return;
+          const uint16_t base =
+              0x0050 + static_cast<uint16_t>(idx.value()) * 0x0010;
+          id(xy6509)->queue_command(
+              esphome::modbus_controller::ModbusCommandItem::
+                  create_write_single_command(
+                      id(xy6509), base + 0x000E,
+                      static_cast<uint16_t>(lroundf(x))));
+
+  - platform: template
+    id: xy6509_profile_power_on
+    name: "Profil: Ausgang nach Gerätestart"
+    icon: "mdi:power-cycle"
+    mode: box
+    min_value: 0
+    max_value: 1
+    step: 1
+    optimistic: true
+    set_action:
+      - lambda: |-
+          const auto idx = id(xy6509_profile_view).active_index();
+          if (!idx.has_value()) return;
+          const uint16_t base =
+              0x0050 + static_cast<uint16_t>(idx.value()) * 0x0010;
+          id(xy6509)->queue_command(
+              esphome::modbus_controller::ModbusCommandItem::
+                  create_write_single_command(
+                      id(xy6509), base + 0x000D,
+                      static_cast<uint16_t>(x != 0.0f ? 1 : 0)));
+
 # ---------------------------------------------------------------------------
 # Schalter
 # ---------------------------------------------------------------------------
@@ -914,7 +1193,7 @@ select:
               id(xy6509_profile_owh).publish_state(owh / 100.0f);
               id(xy6509_profile_otp).publish_state(w(12));
               id(xy6509_profile_etp).publish_state(w(14));
-              id(xy6509_profile_power_on).publish_state(w(13) != 0);
+              id(xy6509_profile_power_on).publish_state(w(13) != 0 ? 1.0f : 0.0f);
             };
 
             auto cmd = esphome::modbus_controller::ModbusCommandItem::
@@ -1102,88 +1381,6 @@ sensor:
     value_type: U_WORD
     entity_category: diagnostic
 
-  # -------------------------------------------------------------------------
-  # Profil-Viewer: nur-lesende Werte des oben gewaehlten Profils.
-  # Gefuellt ausschliesslich per publish_state aus dem Select "Profil anzeigen".
-  # -------------------------------------------------------------------------
-  - platform: template
-    id: xy6509_profile_voltage
-    name: "Profil: Sollspannung"
-    unit_of_measurement: "V"
-    device_class: voltage
-    accuracy_decimals: 2
-    icon: "mdi:sine-wave"
-
-  - platform: template
-    id: xy6509_profile_current
-    name: "Profil: Strombegrenzung"
-    unit_of_measurement: "A"
-    device_class: current
-    accuracy_decimals: 3
-    icon: "mdi:current-dc"
-
-  - platform: template
-    id: xy6509_profile_lvp
-    name: "Profil: Alarmgrenze Unterspannung (LVP)"
-    unit_of_measurement: "V"
-    accuracy_decimals: 2
-    icon: "mdi:flash-triangle-outline"
-
-  - platform: template
-    id: xy6509_profile_ovp
-    name: "Profil: Alarmgrenze Überspannung (OVP)"
-    unit_of_measurement: "V"
-    accuracy_decimals: 2
-    icon: "mdi:flash-triangle"
-
-  - platform: template
-    id: xy6509_profile_ocp
-    name: "Profil: Alarmgrenze Überstrom (OCP)"
-    unit_of_measurement: "A"
-    accuracy_decimals: 3
-    icon: "mdi:current-dc"
-
-  - platform: template
-    id: xy6509_profile_opp
-    name: "Profil: Alarmgrenze Überleistung (OPP)"
-    unit_of_measurement: "W"
-    accuracy_decimals: 1
-    icon: "mdi:lightning-bolt"
-
-  - platform: template
-    id: xy6509_profile_ohp
-    name: "Profil: Alarmgrenze Laufzeit (OHP)"
-    unit_of_measurement: "min"
-    accuracy_decimals: 0
-    icon: "mdi:timer-alert-outline"
-
-  - platform: template
-    id: xy6509_profile_oah
-    name: "Profil: Alarmgrenze Kapazität (OAH)"
-    unit_of_measurement: "Ah"
-    accuracy_decimals: 3
-    icon: "mdi:battery-alert-variant-outline"
-
-  - platform: template
-    id: xy6509_profile_owh
-    name: "Profil: Alarmgrenze Energie (OWH)"
-    unit_of_measurement: "Wh"
-    accuracy_decimals: 2
-    icon: "mdi:lightning-bolt-circle"
-
-  - platform: template
-    id: xy6509_profile_otp
-    name: "Profil: Alarmgrenze interne Temperatur (OTP)"
-    unit_of_measurement: "°C"
-    accuracy_decimals: 0
-    icon: "mdi:thermometer-alert"
-
-  - platform: template
-    id: xy6509_profile_etp
-    name: "Profil: Alarmgrenze externe Temperatur (ETP)"
-    unit_of_measurement: "°C"
-    accuracy_decimals: 0
-    icon: "mdi:thermometer-probe"
 
 # ---------------------------------------------------------------------------
 # Statuswerte
@@ -1198,12 +1395,6 @@ binary_sensor:
     register_type: holding
     bitmask: 0x0001
     icon: "mdi:current-dc"
-
-  # Profil-Viewer: "Ausgang nach Gerätestart" (S-INI) des gewaehlten Profils.
-  - platform: template
-    id: xy6509_profile_power_on
-    name: "Profil: Ausgang nach Gerätestart"
-    icon: "mdi:power-cycle"
 
   - platform: template
     id: xy6509_alarm_active
