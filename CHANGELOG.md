@@ -27,6 +27,11 @@ und das Projekt folgt [Semantic Versioning](https://semver.org/lang/de/).
   erscheint jetzt in Home Assistant (Geräteinfo) und im Boot-Log. Muss bei
   jedem Release mit CHANGELOG und Git-Tag synchron gehalten werden.
 
+### Removed
+- Button „Aktuelle Werte als Preset speichern" und Select „Preset-Speicherziel".
+  Der Profil-Editor bearbeitet jeden Slot direkt; das separate Speichern der
+  aktiven Werte in einen Slot ist damit überflüssig.
+
 ## [0.5.1] – 2026-07-19
 
 ### Changed
