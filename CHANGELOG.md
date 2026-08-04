@@ -10,6 +10,11 @@ und das Projekt folgt [Semantic Versioning](https://semver.org/lang/de/).
 
 ## [Unreleased]
 
+### Removed
+- **Display-Ausschaltzeit** (`0x0015`) entfernt. Das dauerhafte Modbus-Polling
+  (1 s) setzt den Screen-Off-Timer des XY-6509 vermutlich ständig zurück, sodass
+  der LCD nie abschaltet – die Entität war damit wirkungslos und irreführend.
+
 ## [0.5.2] – 2026-08-04
 
 ### Fixed
