@@ -170,6 +170,12 @@ Strombegrenzung und alle Schutzgrenzen (Modbus-Referenz, *Note 2*).
 > M0 ist die Standardgruppe, M1/M2 sind die Presets der Gerätetasten – beim
 > Überschreiben ändert sich deren Verhalten. M3–M9 sind freie Speicher.
 
+> **M0 = aktiver Arbeitsdatensatz:** Der M0-Block ist kein Preset unter zehn,
+> sondern die live wirksamen Register (die Alarmgrenzen `0x0052–0x005E` liegen
+> im selben Block). Sollspannung/Strombegrenzung im Profil-Editor bei M0 zu
+> ändern wirkt daher sofort live bzw. wird von Live-Änderungen überschrieben –
+> das ist Geräteverhalten. Dauerhafte Preset-Werte gehören in M1–M9.
+
 ## Modbus-Referenz
 
 Das vollständige Protokoll liegt als PDF im Repo:

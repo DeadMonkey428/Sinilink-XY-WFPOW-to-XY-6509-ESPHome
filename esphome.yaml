@@ -1028,6 +1028,10 @@ select:
   # (Basis 0x0050 + Mx*0x10) aus und schiebt die Werte in die editierbaren
   # "Profil: ..."-number-Entities. Deren Bearbeiten schreibt direkt in den
   # gewaehlten Slot (kein Laden in die aktive Config - dafuer "Preset laden").
+  # ACHTUNG M0: Der M0-Block IST der aktive Arbeitsdatensatz (die Live-
+  # Alarmgrenzen 0x0052-0x005E liegen im selben Block). V-SET/I-SET-Edits
+  # bei M0 wirken daher live bzw. werden von den Live-Werten ueberschrieben -
+  # Geraeteverhalten, nicht vermeidbar.
   - platform: template
     id: xy6509_profile_view
     name: "Profil anzeigen"
