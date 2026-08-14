@@ -10,6 +10,18 @@ und das Projekt folgt [Semantic Versioning](https://semver.org/lang/de/).
 
 ## [Unreleased]
 
+## [0.5.3] – 2026-08-09
+
+### Changed
+- **Profil-Editor bietet nur noch M1–M9 an.** M0 ist der aktive
+  Arbeitsdatensatz, dessen Werte die Live-Entitäten bereits zeigen; Edits dort
+  wirkten live bzw. wurden überschrieben. Slot-Adressierung in den Lambdas
+  entsprechend korrigiert (Listenindex + 1).
+- **Dokumentation M0:** Der M0-Block ist der aktive Arbeitsdatensatz (die
+  Live-Alarmgrenzen `0x0052–0x005E` liegen im selben Block). Sollspannung/
+  Strombegrenzung im Profil-Editor bei M0 zu ändern wirkt live bzw. wird von
+  Live-Werten überschrieben – Geräteverhalten. Hinweis in README und YAML.
+
 ### Removed
 - **Display-Ausschaltzeit** (`0x0015`) entfernt. Das dauerhafte Modbus-Polling
   (1 s) setzt den Screen-Off-Timer des XY-6509 vermutlich ständig zurück, sodass
@@ -135,7 +147,8 @@ Grundkonfiguration (Ausgangsstand des Projekts).
   quittieren", Konstantstrom- und Tastensperre-Anzeige.
 - **WiFi-Status-Sync** aufs XY-6509-Display und Status-LED.
 
-[Unreleased]: https://github.com/DeadMonkey428/Sinilink-XY-WFPOW-to-XY-6509-ESPHome/compare/v0.5.2...HEAD
+[Unreleased]: https://github.com/DeadMonkey428/Sinilink-XY-WFPOW-to-XY-6509-ESPHome/compare/v0.5.3...HEAD
+[0.5.3]: https://github.com/DeadMonkey428/Sinilink-XY-WFPOW-to-XY-6509-ESPHome/compare/v0.5.2...v0.5.3
 [0.5.2]: https://github.com/DeadMonkey428/Sinilink-XY-WFPOW-to-XY-6509-ESPHome/compare/v0.5.1...v0.5.2
 [0.5.1]: https://github.com/DeadMonkey428/Sinilink-XY-WFPOW-to-XY-6509-ESPHome/compare/v0.5.0...v0.5.1
 [0.5.0]: https://github.com/DeadMonkey428/Sinilink-XY-WFPOW-to-XY-6509-ESPHome/releases/tag/v0.5.0

@@ -6,7 +6,7 @@ esphome:
   # Version bei jedem Release mit CHANGELOG.md und Git-Tag synchron halten.
   project:
     name: "deadmonkey428.sinilink-xy6509"
-    version: "0.5.2"
+    version: "0.5.3"
 
 esp8266:
   board: esp01_1m
@@ -510,7 +510,7 @@ number:
           const auto idx = id(xy6509_profile_view).active_index();
           if (!idx.has_value()) return;
           const uint16_t base =
-              0x0050 + static_cast<uint16_t>(idx.value()) * 0x0010;
+              0x0050 + static_cast<uint16_t>(idx.value() + 1) * 0x0010;
           id(xy6509)->queue_command(
               esphome::modbus_controller::ModbusCommandItem::
                   create_write_single_command(
@@ -533,7 +533,7 @@ number:
           const auto idx = id(xy6509_profile_view).active_index();
           if (!idx.has_value()) return;
           const uint16_t base =
-              0x0050 + static_cast<uint16_t>(idx.value()) * 0x0010;
+              0x0050 + static_cast<uint16_t>(idx.value() + 1) * 0x0010;
           id(xy6509)->queue_command(
               esphome::modbus_controller::ModbusCommandItem::
                   create_write_single_command(
@@ -555,7 +555,7 @@ number:
           const auto idx = id(xy6509_profile_view).active_index();
           if (!idx.has_value()) return;
           const uint16_t base =
-              0x0050 + static_cast<uint16_t>(idx.value()) * 0x0010;
+              0x0050 + static_cast<uint16_t>(idx.value() + 1) * 0x0010;
           id(xy6509)->queue_command(
               esphome::modbus_controller::ModbusCommandItem::
                   create_write_single_command(
@@ -577,7 +577,7 @@ number:
           const auto idx = id(xy6509_profile_view).active_index();
           if (!idx.has_value()) return;
           const uint16_t base =
-              0x0050 + static_cast<uint16_t>(idx.value()) * 0x0010;
+              0x0050 + static_cast<uint16_t>(idx.value() + 1) * 0x0010;
           id(xy6509)->queue_command(
               esphome::modbus_controller::ModbusCommandItem::
                   create_write_single_command(
@@ -599,7 +599,7 @@ number:
           const auto idx = id(xy6509_profile_view).active_index();
           if (!idx.has_value()) return;
           const uint16_t base =
-              0x0050 + static_cast<uint16_t>(idx.value()) * 0x0010;
+              0x0050 + static_cast<uint16_t>(idx.value() + 1) * 0x0010;
           id(xy6509)->queue_command(
               esphome::modbus_controller::ModbusCommandItem::
                   create_write_single_command(
@@ -621,7 +621,7 @@ number:
           const auto idx = id(xy6509_profile_view).active_index();
           if (!idx.has_value()) return;
           const uint16_t base =
-              0x0050 + static_cast<uint16_t>(idx.value()) * 0x0010;
+              0x0050 + static_cast<uint16_t>(idx.value() + 1) * 0x0010;
           id(xy6509)->queue_command(
               esphome::modbus_controller::ModbusCommandItem::
                   create_write_single_command(
@@ -643,7 +643,7 @@ number:
           const auto idx = id(xy6509_profile_view).active_index();
           if (!idx.has_value()) return;
           const uint16_t base =
-              0x0050 + static_cast<uint16_t>(idx.value()) * 0x0010;
+              0x0050 + static_cast<uint16_t>(idx.value() + 1) * 0x0010;
           const int total = static_cast<int>(lroundf(x));
           const std::vector<uint16_t> vals = {
               static_cast<uint16_t>(total / 60),
@@ -667,7 +667,7 @@ number:
           const auto idx = id(xy6509_profile_view).active_index();
           if (!idx.has_value()) return;
           const uint16_t base =
-              0x0050 + static_cast<uint16_t>(idx.value()) * 0x0010;
+              0x0050 + static_cast<uint16_t>(idx.value() + 1) * 0x0010;
           const uint32_t raw = static_cast<uint32_t>(lroundf(x * 1000.0f));
           const std::vector<uint16_t> vals = {
               static_cast<uint16_t>(raw & 0xFFFF),
@@ -691,7 +691,7 @@ number:
           const auto idx = id(xy6509_profile_view).active_index();
           if (!idx.has_value()) return;
           const uint16_t base =
-              0x0050 + static_cast<uint16_t>(idx.value()) * 0x0010;
+              0x0050 + static_cast<uint16_t>(idx.value() + 1) * 0x0010;
           const uint32_t raw = static_cast<uint32_t>(lroundf(x * 100.0f));
           const std::vector<uint16_t> vals = {
               static_cast<uint16_t>(raw & 0xFFFF),
@@ -715,7 +715,7 @@ number:
           const auto idx = id(xy6509_profile_view).active_index();
           if (!idx.has_value()) return;
           const uint16_t base =
-              0x0050 + static_cast<uint16_t>(idx.value()) * 0x0010;
+              0x0050 + static_cast<uint16_t>(idx.value() + 1) * 0x0010;
           id(xy6509)->queue_command(
               esphome::modbus_controller::ModbusCommandItem::
                   create_write_single_command(
@@ -737,7 +737,7 @@ number:
           const auto idx = id(xy6509_profile_view).active_index();
           if (!idx.has_value()) return;
           const uint16_t base =
-              0x0050 + static_cast<uint16_t>(idx.value()) * 0x0010;
+              0x0050 + static_cast<uint16_t>(idx.value() + 1) * 0x0010;
           id(xy6509)->queue_command(
               esphome::modbus_controller::ModbusCommandItem::
                   create_write_single_command(
@@ -758,7 +758,7 @@ number:
           const auto idx = id(xy6509_profile_view).active_index();
           if (!idx.has_value()) return;
           const uint16_t base =
-              0x0050 + static_cast<uint16_t>(idx.value()) * 0x0010;
+              0x0050 + static_cast<uint16_t>(idx.value() + 1) * 0x0010;
           id(xy6509)->queue_command(
               esphome::modbus_controller::ModbusCommandItem::
                   create_write_single_command(
@@ -1028,19 +1028,19 @@ select:
   # (Basis 0x0050 + Mx*0x10) aus und schiebt die Werte in die editierbaren
   # "Profil: ..."-number-Entities. Deren Bearbeiten schreibt direkt in den
   # gewaehlten Slot (kein Laden in die aktive Config - dafuer "Preset laden").
-  # ACHTUNG M0: Der M0-Block IST der aktive Arbeitsdatensatz (die Live-
-  # Alarmgrenzen 0x0052-0x005E liegen im selben Block). V-SET/I-SET-Edits
-  # bei M0 wirken daher live bzw. werden von den Live-Werten ueberschrieben -
-  # Geraeteverhalten, nicht vermeidbar.
+  # M0 ist bewusst NICHT waehlbar: der M0-Block ist der aktive Arbeits-
+  # datensatz (die Live-Alarmgrenzen 0x0052-0x005E liegen im selben Block),
+  # dessen Werte zeigen die normalen Live-Entities bereits. V-SET/I-SET-Edits
+  # bei M0 wuerden live wirken bzw. ueberschrieben werden.
+  # Liste beginnt bei M1 -> Slotnummer = active_index() + 1 (in allen Lambdas).
   - platform: template
     id: xy6509_profile_view
     name: "Profil anzeigen"
     icon: "mdi:eye-settings-outline"
     optimistic: true
     restore_value: true
-    initial_option: "M0"
+    initial_option: "M1"
     options:
-      - "M0"
       - "M1"
       - "M2"
       - "M3"
@@ -1056,7 +1056,7 @@ select:
             const auto idx = id(xy6509_profile_view).active_index();
             if (!idx.has_value()) return;
             const uint16_t base =
-                0x0050 + static_cast<uint16_t>(idx.value()) * 0x0010;
+                0x0050 + static_cast<uint16_t>(idx.value() + 1) * 0x0010;
 
             auto handler = [](esphome::modbus_controller::ModbusRegisterType,
                               uint16_t, const std::vector<uint8_t> &data) {

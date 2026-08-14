@@ -172,9 +172,9 @@ Strombegrenzung und alle Schutzgrenzen (Modbus-Referenz, *Note 2*).
 
 > **M0 = aktiver Arbeitsdatensatz:** Der M0-Block ist kein Preset unter zehn,
 > sondern die live wirksamen Register (die Alarmgrenzen `0x0052–0x005E` liegen
-> im selben Block). Sollspannung/Strombegrenzung im Profil-Editor bei M0 zu
-> ändern wirkt daher sofort live bzw. wird von Live-Änderungen überschrieben –
-> das ist Geräteverhalten. Dauerhafte Preset-Werte gehören in M1–M9.
+> im selben Block). Seine Werte zeigen die normalen Live-Entitäten bereits;
+> Änderungen dort würden sofort live wirken bzw. überschrieben werden. Der
+> Profil-Editor bietet deshalb nur **M1–M9** an.
 
 ## Modbus-Referenz
 
