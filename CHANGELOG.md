@@ -10,6 +10,8 @@ und das Projekt folgt [Semantic Versioning](https://semver.org/lang/de/).
 
 ## [Unreleased]
 
+## [0.5.4] – 2026-08-15
+
 ### Changed
 - **Schrittweiten** der Sollwerte und Alarmgrenzen vereinheitlicht (Live-Entitäten
   und Profil-Editor): Sollspannung, Strombegrenzung, LVP, OVP, OCP, OAH, OWH
@@ -152,7 +154,8 @@ Grundkonfiguration (Ausgangsstand des Projekts).
   quittieren", Konstantstrom- und Tastensperre-Anzeige.
 - **WiFi-Status-Sync** aufs XY-6509-Display und Status-LED.
 
-[Unreleased]: https://github.com/DeadMonkey428/Sinilink-XY-WFPOW-to-XY-6509-ESPHome/compare/v0.5.3...HEAD
+[Unreleased]: https://github.com/DeadMonkey428/Sinilink-XY-WFPOW-to-XY-6509-ESPHome/compare/v0.5.4...HEAD
+[0.5.4]: https://github.com/DeadMonkey428/Sinilink-XY-WFPOW-to-XY-6509-ESPHome/compare/v0.5.3...v0.5.4
 [0.5.3]: https://github.com/DeadMonkey428/Sinilink-XY-WFPOW-to-XY-6509-ESPHome/compare/v0.5.2...v0.5.3
 [0.5.2]: https://github.com/DeadMonkey428/Sinilink-XY-WFPOW-to-XY-6509-ESPHome/compare/v0.5.1...v0.5.2
 [0.5.1]: https://github.com/DeadMonkey428/Sinilink-XY-WFPOW-to-XY-6509-ESPHome/compare/v0.5.0...v0.5.1
