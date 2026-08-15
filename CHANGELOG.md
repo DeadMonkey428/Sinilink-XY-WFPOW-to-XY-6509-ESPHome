@@ -10,6 +10,11 @@ und das Projekt folgt [Semantic Versioning](https://semver.org/lang/de/).
 
 ## [Unreleased]
 
+### Changed
+- **Schrittweiten** der Sollwerte und Alarmgrenzen vereinheitlicht (Live-Entitäten
+  und Profil-Editor): Sollspannung, Strombegrenzung, LVP, OVP, OCP, OAH, OWH
+  auf `0.1`, OPP auf `1`. OHP, OTP, ETP bleiben `1`.
+
 ## [0.5.3] – 2026-08-09
 
 ### Changed
