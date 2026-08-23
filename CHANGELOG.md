@@ -10,6 +10,8 @@ und das Projekt folgt [Semantic Versioning](https://semver.org/lang/de/).
 
 ## [Unreleased]
 
+## [0.5.6] – 2026-08-23
+
 ### Added
 - **`dashboard_import`**: Das Repo ist jetzt Update-Quelle. Die lokale
   Konfiguration im ESPHome-Dashboard besteht nur noch aus einem
@@ -171,7 +173,8 @@ Grundkonfiguration (Ausgangsstand des Projekts).
   quittieren", Konstantstrom- und Tastensperre-Anzeige.
 - **WiFi-Status-Sync** aufs XY-6509-Display und Status-LED.
 
-[Unreleased]: https://github.com/DeadMonkey428/Sinilink-XY-WFPOW-to-XY-6509-ESPHome/compare/v0.5.5...HEAD
+[Unreleased]: https://github.com/DeadMonkey428/Sinilink-XY-WFPOW-to-XY-6509-ESPHome/compare/v0.5.6...HEAD
+[0.5.6]: https://github.com/DeadMonkey428/Sinilink-XY-WFPOW-to-XY-6509-ESPHome/compare/v0.5.5...v0.5.6
 [0.5.5]: https://github.com/DeadMonkey428/Sinilink-XY-WFPOW-to-XY-6509-ESPHome/compare/v0.5.4...v0.5.5
 [0.5.4]: https://github.com/DeadMonkey428/Sinilink-XY-WFPOW-to-XY-6509-ESPHome/compare/v0.5.3...v0.5.4
 [0.5.3]: https://github.com/DeadMonkey428/Sinilink-XY-WFPOW-to-XY-6509-ESPHome/compare/v0.5.2...v0.5.3
