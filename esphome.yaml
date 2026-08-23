@@ -8,6 +8,14 @@ esphome:
     name: "deadmonkey428.sinilink-xy6509"
     version: "0.5.5"
 
+# Macht dieses Repo zur Update-Quelle: Home Assistant/ESPHome vergleicht die
+# project.version des Geraets mit der hier hinterlegten Datei und meldet neue
+# Versionen als Update. Die lokale Konfiguration im ESPHome-Dashboard besteht
+# dann nur noch aus dem packages:-Verweis (siehe README).
+dashboard_import:
+  package_import_url: github://DeadMonkey428/Sinilink-XY-WFPOW-to-XY-6509-ESPHome/esphome.yaml@main
+  import_full_config: false
+
 esp8266:
   board: esp01_1m
 

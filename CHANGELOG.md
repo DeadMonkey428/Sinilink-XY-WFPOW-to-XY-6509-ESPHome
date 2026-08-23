@@ -10,6 +10,12 @@ und das Projekt folgt [Semantic Versioning](https://semver.org/lang/de/).
 
 ## [Unreleased]
 
+### Added
+- **`dashboard_import`**: Das Repo ist jetzt Update-Quelle. Die lokale
+  Konfiguration im ESPHome-Dashboard besteht nur noch aus einem
+  `packages:`-Verweis auf `esphome.yaml@main`; neue Versionen meldet Home
+  Assistant dann als Update statt Copy-Paste. README entsprechend erweitert.
+
 ## [0.5.5] – 2026-08-23
 
 ### Changed

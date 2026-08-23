@@ -97,17 +97,34 @@ Home Assistant erkennt das ESPHome-Gerät automatisch:
 ### 4. Eigene Konfiguration (YAML) einspielen
 
 1. Im **ESPHome-Dashboard** das Gerät **übernehmen** („Adopt“ / „Take control“).
-2. **Edit** öffnen und den **gesamten** Inhalt durch
-   [`esphome.yaml`](esphome.yaml) ersetzen.
-3. `secrets.yaml` im Dashboard anlegen/ergänzen (siehe [Secrets](#secrets)) –
+2. `secrets.yaml` im Dashboard anlegen/ergänzen (siehe [Secrets](#secrets)) –
    **wichtig:** `wifi_ssid`/`wifi_password` müssen zum WLAN aus Schritt 2
    passen, sonst fällt das Gerät nach dem Update aus dem Netz.
+3. **Edit** öffnen und den **gesamten** Inhalt durch diesen Verweis ersetzen
+   (empfohlen – so meldet Home Assistant künftige Versionen als Update):
+
+   ```yaml
+   packages:
+     sinilink: github://DeadMonkey428/Sinilink-XY-WFPOW-to-XY-6509-ESPHome/esphome.yaml@main
+   ```
+
+   Alternativ den kompletten Inhalt von [`esphome.yaml`](esphome.yaml)
+   hineinkopieren – dann gibt es aber **keine** Update-Meldungen, und jede neue
+   Version muss von Hand neu eingefügt werden.
 4. **Install → Wirelessly (OTA)** – die fertige Firmware wird über WLAN
    aufgespielt. Ab jetzt laufen alle weiteren Updates per OTA, kein Adapter
    mehr nötig.
 
 > Home Assistant fragt beim Übernehmen den `api_encryption_key` ab (Wert aus
 > `secrets.yaml`).
+
+### Updates
+
+Mit dem `packages:`-Verweis aus Schritt 4 zieht das ESPHome-Dashboard die
+Konfiguration direkt aus diesem Repo (`@main`). Erscheint hier eine neue
+Version, meldet Home Assistant sie beim Gerät als **Update** – installieren
+genügt, kein Copy-Paste. Wer eine Version festhalten will, ersetzt `@main`
+durch ein Tag, z. B. `@v0.5.5`.
 
 ### Alternative: ESPHome-CLI
 
