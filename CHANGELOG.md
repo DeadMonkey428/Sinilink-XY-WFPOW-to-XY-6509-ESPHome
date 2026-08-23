@@ -10,7 +10,12 @@ und das Projekt folgt [Semantic Versioning](https://semver.org/lang/de/).
 
 ## [Unreleased]
 
+## [0.5.5] – 2026-08-23
+
 ### Changed
+- **ESPHome ≥ 2026.8.0 erforderlich** (`min_version`). Der Block-Read des
+  Profil-Editors nutzt die neue Modbus-API (`modbus::EntityType`,
+  `std::span`); mit ESPHome 2026.8 kompilierte die alte Signatur nicht mehr.
 - **M0 wieder im Profil-Editor wählbar** (Dropdown „Profil anzeigen" M0–M9).
   Ohne M0 war nicht sichtbar, was im aktiven Arbeitsdatensatz steht.
   Slot-Adressierung in den Lambdas wieder `active_index()` (ohne +1).
@@ -160,7 +165,8 @@ Grundkonfiguration (Ausgangsstand des Projekts).
   quittieren", Konstantstrom- und Tastensperre-Anzeige.
 - **WiFi-Status-Sync** aufs XY-6509-Display und Status-LED.
 
-[Unreleased]: https://github.com/DeadMonkey428/Sinilink-XY-WFPOW-to-XY-6509-ESPHome/compare/v0.5.4...HEAD
+[Unreleased]: https://github.com/DeadMonkey428/Sinilink-XY-WFPOW-to-XY-6509-ESPHome/compare/v0.5.5...HEAD
+[0.5.5]: https://github.com/DeadMonkey428/Sinilink-XY-WFPOW-to-XY-6509-ESPHome/compare/v0.5.4...v0.5.5
 [0.5.4]: https://github.com/DeadMonkey428/Sinilink-XY-WFPOW-to-XY-6509-ESPHome/compare/v0.5.3...v0.5.4
 [0.5.3]: https://github.com/DeadMonkey428/Sinilink-XY-WFPOW-to-XY-6509-ESPHome/compare/v0.5.2...v0.5.3
 [0.5.2]: https://github.com/DeadMonkey428/Sinilink-XY-WFPOW-to-XY-6509-ESPHome/compare/v0.5.1...v0.5.2

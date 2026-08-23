@@ -1,12 +1,12 @@
 esphome:
   name: sinilink
   friendly_name: Sinilink XY-WFPOW
-  min_version: 2026.4.0
+  min_version: 2026.8.0
   name_add_mac_suffix: false
   # Version bei jedem Release mit CHANGELOG.md und Git-Tag synchron halten.
   project:
     name: "deadmonkey428.sinilink-xy6509"
-    version: "0.5.4"
+    version: "0.5.5"
 
 esp8266:
   board: esp01_1m
@@ -1059,10 +1059,8 @@ select:
             const uint16_t base =
                 0x0050 + static_cast<uint16_t>(idx.value()) * 0x0010;
 
-            // Generischer Lambda: ESPHome uebergibt die Daten je nach Version als
-            // std::vector<uint8_t>& (<=2026.8) oder std::span<const uint8_t>
-            // (neuer). 'auto' bindet an beides.
-            auto handler = [](auto, uint16_t, const auto &data) {
+            auto handler = [](esphome::modbus::EntityType, uint16_t,
+                              std::span<const uint8_t> data) {
               if (data.size() < 30) return;  // 15 Register * 2 Byte
               auto w = [&](int i) -> uint16_t {
                 return (static_cast<uint16_t>(data[2 * i]) << 8) | data[2 * i + 1];
@@ -1087,9 +1085,7 @@ select:
             auto cmd = esphome::modbus_controller::ModbusCommandItem::
                 create_read_command(
                     id(xy6509),
-                    // ponytail: deprecated Alias, bis ESPHome 2027.2 ok; danach
-                    // auf esphome::modbus::EntityType::HOLDING umstellen.
-                    esphome::modbus_controller::ModbusRegisterType::HOLDING,
+                    esphome::modbus::EntityType::HOLDING,
                     base, 15, std::move(handler));
             id(xy6509)->queue_command(cmd);
 
