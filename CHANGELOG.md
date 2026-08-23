@@ -10,6 +10,12 @@ und das Projekt folgt [Semantic Versioning](https://semver.org/lang/de/).
 
 ## [Unreleased]
 
+### Changed
+- **M0 wieder im Profil-Editor wählbar** (Dropdown „Profil anzeigen" M0–M9).
+  Ohne M0 war nicht sichtbar, was im aktiven Arbeitsdatensatz steht.
+  Slot-Adressierung in den Lambdas wieder `active_index()` (ohne +1).
+  Der Hinweis bleibt: V/I-Edits bei M0 wirken live bzw. werden überschrieben.
+
 ## [0.5.4] – 2026-08-15
 
 ### Changed
